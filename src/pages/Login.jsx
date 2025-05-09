@@ -33,7 +33,7 @@ const Login = () => {
         placement: 'topRight',
       });
       setTimeout(() => {
-        navigate('/calendar');
+        navigate('https://chi-tieu-web-client.vercel.app/calendar');
     }, 2000);
     // eslint-disable-next-line no-unused-vars
     } catch (err) {
@@ -99,7 +99,7 @@ const Login = () => {
           </Card>
           <p style={{ textAlign: 'center', marginTop: 16 }}>
             Chưa có tài khoản?{' '}
-            <a onClick={() => navigate('/register')} style={{ color: '#1677ff' }}>
+            <a onClick={() => navigate('https://chi-tieu-web-client.vercel.app/register')} style={{ color: '#1677ff' }}>
               Đăng ký ngay
             </a>
           </p>
