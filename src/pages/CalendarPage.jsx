@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, Typography, Button, message, List, Space, Row, Col } from 'antd';
 import dayjs from 'dayjs';
-import * as jwtDecode from 'jwt-decode';
 import API from '../api';
 
 const { Title } = Typography;
@@ -13,25 +12,6 @@ const CalendarPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      try {
-        const decoded = jwtDecode.default(token);
-        if (decoded.exp * 1000 < Date.now()) {
-          localStorage.removeItem('token');
-          message.warning('Phiên đăng nhập đã hết hạn');
-          navigate('/login');
-          return;
-        }
-      } catch (err) {
-        localStorage.removeItem('token');
-        navigate('/login');
-        return;
-      }
-    } else {
-      navigate('/login');
-      return;
-    }
 
     const fetchMarkedDates = async () => {
       try {
