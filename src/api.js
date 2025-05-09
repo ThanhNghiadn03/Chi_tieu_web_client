@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: import.meta.env.REACT_APP_API_URL + '/api',
+  baseURL: 'https://chitieuwebserver-production.up.railway.app' + '/api',
 });
 
 API.interceptors.request.use((config) => {
