@@ -14,7 +14,7 @@ import {
   Col
 } from 'antd';
 import dayjs from 'dayjs';
-import jwtDecode from 'jwt-decode';
+import * as jwtDecode from 'jwt-decode';
 import API from '../api';
 
 const { Title } = Typography;
@@ -33,7 +33,7 @@ const ExpensesPage = () => {
     const token = localStorage.getItem('token');
     if (token) {
       try {
-        const decoded = jwtDecode(token);
+        const decoded = jwtDecode.default(token);
         if (decoded.exp * 1000 < Date.now()) {
           localStorage.removeItem('token');
           message.warning('Phiên đăng nhập đã hết hạn');
