@@ -14,7 +14,7 @@ const Register = () => {
     try {
       await API.post('/register', values);
       message.success('Đăng ký thành công, vui lòng đăng nhập!');
-      navigate('https://chi-tieu-web-client.vercel.app/login');
+      navigate('/login');
     } catch (err) {
       if (err?.response?.data?.error === 'Username already exists') {
         message.error('Tên đăng nhập đã tồn tại');
@@ -75,7 +75,7 @@ const Register = () => {
         </Card>
         <p style={{ textAlign: 'center', marginTop: 16 }}>
   Đã có tài khoản?{' '}
-  <a onClick={() => navigate('https://chi-tieu-web-client.vercel.app/login')} style={{ color: '#1677ff' }}>
+  <a onClick={() => navigate('/login')} style={{ color: '#1677ff' }}>
     Đăng nhập
   </a>
 </p>

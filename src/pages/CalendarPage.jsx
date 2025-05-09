@@ -29,7 +29,7 @@ const CalendarPage = () => {
   const handleViewExpenses = () => {
     if (!selectedDate) return message.warning('Vui lòng chọn ngày');
     const dateString = selectedDate.format('YYYY-MM-DD');
-    navigate(`https://chi-tieu-web-client.vercel.app/expenses/${dateString}`);
+    navigate(`/expenses/${dateString}`);
   };
 
   const handleBackToToday = () => {
@@ -75,7 +75,7 @@ const CalendarPage = () => {
           renderItem={(item) => (
             <List.Item
               style={{ cursor: 'pointer' }}
-              onClick={() => navigate(`https://chi-tieu-web-client.vercel.app/expenses/${item}`)}
+              onClick={() => navigate(`/expenses/${item}`)}
             >
               {dayjs(item).format('DD/MM/YYYY')}
             </List.Item>
