@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Calendar, Typography, Button, message, List, Space } from 'antd';
+import { Calendar, Typography, Button, message, List, Space, Row, Col } from 'antd';
 import dayjs from 'dayjs';
+import jwtDecode from 'jwt-decode';
 import API from '../api';
 
 const { Title } = Typography;
@@ -12,6 +13,26 @@ const CalendarPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        if (decoded.exp * 1000 < Date.now()) {
+          localStorage.removeItem('token');
+          message.warning('Phiên đăng nhập đã hết hạn');
+          navigate('/login');
+          return;
+        }
+      } catch (err) {
+        localStorage.removeItem('token');
+        navigate('/login');
+        return;
+      }
+    } else {
+      navigate('/login');
+      return;
+    }
+
     const fetchMarkedDates = async () => {
       try {
         const res = await API.get('/expenses-calendar/get-all-dates');
@@ -24,7 +45,7 @@ const CalendarPage = () => {
     };
 
     fetchMarkedDates();
-  }, []);
+  }, [navigate]);
 
   const handleViewExpenses = () => {
     if (!selectedDate) return message.warning('Vui lòng chọn ngày');
@@ -46,9 +67,7 @@ const CalendarPage = () => {
     const match = markedDates.some((d) => dayjs(d).isSame(date, 'day'));
     if (match) {
       return (
-        <div style={{ textAlign: 'center' }}>
-
-        </div>
+        <div style={{ textAlign: 'center' }}></div>
       );
     }
     return null;
@@ -66,13 +85,23 @@ const CalendarPage = () => {
         style={{ marginBottom: 24 }}
       />
 
-      <Space style={{ marginBottom: 24 }}>
-        <Button type="primary" onClick={handleViewExpenses}>
-          Xem chi tiêu ngày {selectedDate.format('DD/MM/YYYY')}
-        </Button>
-        <Button onClick={handleBackToToday}>Quay về hôm nay</Button>
-        <Button danger onClick={handleLogout}>Đăng xuất</Button>
-      </Space>
+      <Row gutter={[8, 8]} justify="start" style={{ marginBottom: 24 }}>
+        <Col xs={24} sm={8} md={6} lg={5}>
+          <Button type="primary" block onClick={handleViewExpenses}>
+            Xem chi tiêu {selectedDate.format('DD/MM')}
+          </Button>
+        </Col>
+        <Col xs={24} sm={8} md={6} lg={5}>
+          <Button block onClick={handleBackToToday}>
+            Quay về hôm nay
+          </Button>
+        </Col>
+        <Col xs={24} sm={8} md={6} lg={5}>
+          <Button danger block onClick={handleLogout}>
+            Đăng xuất
+          </Button>
+        </Col>
+      </Row>
 
       <div style={{ marginTop: 40 }}>
         <Title level={4}>📌 Ngày đã ghi chi tiêu</Title>

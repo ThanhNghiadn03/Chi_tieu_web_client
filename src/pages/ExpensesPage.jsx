@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import {
   Table,
@@ -14,18 +14,44 @@ import {
   Col
 } from 'antd';
 import dayjs from 'dayjs';
+import jwtDecode from 'jwt-decode';
 import API from '../api';
 
 const { Title } = Typography;
 
 const ExpensesPage = () => {
   const { date } = useParams();
+  const navigate = useNavigate();
   const [expenses, setExpenses] = useState([]);
   const [form] = Form.useForm();
   const [editingExpense, setEditingExpense] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        if (decoded.exp * 1000 < Date.now()) {
+          localStorage.removeItem('token');
+          message.warning('Phiên đăng nhập đã hết hạn');
+          navigate('/login');
+          return;
+        }
+      } catch (err) {
+        localStorage.removeItem('token');
+        navigate('/login');
+        return;
+      }
+    } else {
+      navigate('/login');
+      return;
+    }
+
+    fetchExpenses();
+  }, [date, navigate]);
 
   const fetchExpenses = async () => {
     try {
@@ -35,10 +61,6 @@ const ExpensesPage = () => {
       message.error('Không thể tải dữ liệu chi tiêu');
     }
   };
-
-  useEffect(() => {
-    fetchExpenses();
-  }, [date]);
 
   const totalAmount = expenses.reduce((sum, item) => sum + item.total_price, 0);
 
