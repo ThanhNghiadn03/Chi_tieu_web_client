@@ -36,6 +36,12 @@ const CalendarPage = () => {
     setSelectedDate(dayjs());
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    message.success('Đã đăng xuất');
+    navigate('/login');
+  };
+
   const dateCellRender = (date) => {
     const match = markedDates.some((d) => dayjs(d).isSame(date, 'day'));
     if (match) {
@@ -60,11 +66,12 @@ const CalendarPage = () => {
         style={{ marginBottom: 24 }}
       />
 
-      <Space>
+      <Space style={{ marginBottom: 24 }}>
         <Button type="primary" onClick={handleViewExpenses}>
           Xem chi tiêu ngày {selectedDate.format('DD/MM/YYYY')}
         </Button>
         <Button onClick={handleBackToToday}>Quay về hôm nay</Button>
+        <Button danger onClick={handleLogout}>Đăng xuất</Button>
       </Space>
 
       <div style={{ marginTop: 40 }}>
