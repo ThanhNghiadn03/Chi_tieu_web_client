@@ -3,8 +3,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import CalendarPage from './pages/CalendarPage';
 import ExpensesPage from './pages/ExpensesPage';
-
-const isLoggedIn = () => !!localStorage.getItem('token');
+import PrivateRoute from './routes/PrivateRoute';
 
 function App() {
   return (
@@ -13,11 +12,19 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route
         path="/calendar"
-        element={isLoggedIn() ? <CalendarPage /> : <Navigate to="/login" />}
+        element={
+          <PrivateRoute>
+            <CalendarPage />
+          </PrivateRoute>
+        }
       />
       <Route
         path="/expenses/:date"
-        element={isLoggedIn() ? <ExpensesPage /> : <Navigate to="/login" />}
+        element={
+          <PrivateRoute>
+            <ExpensesPage />
+          </PrivateRoute>
+        }
       />
       <Route path="*" element={<Navigate to="/calendar" />} />
     </Routes>
